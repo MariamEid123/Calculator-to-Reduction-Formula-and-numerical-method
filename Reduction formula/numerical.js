@@ -46,6 +46,14 @@ function resetNumUI() {
     let resVal = document.getElementById('num-result-value');
     if (resVal) resVal.textContent = "0.00000";
     
+    // Reset Error fields
+    if (document.getElementById('num-exact-value')) document.getElementById('num-exact-value').textContent = "0.00000";
+    if (document.getElementById('num-abs-error')) document.getElementById('num-abs-error').textContent = "0.00000";
+    if (document.getElementById('num-exact-value-all')) document.getElementById('num-exact-value-all').textContent = "0.00000";
+    if (document.getElementById('err-all-rect')) document.getElementById('err-all-rect').textContent = "0.00000";
+    if (document.getElementById('err-all-trap')) document.getElementById('err-all-trap').textContent = "0.00000";
+    if (document.getElementById('err-all-simp')) document.getElementById('err-all-simp').textContent = "0.00000";
+    
     let t1 = document.getElementById('num-toggle-steps-btn');
     let t2 = document.getElementById('num-toggle-steps-all-btn');
     if (t1) t1.style.display = 'none';
@@ -75,6 +83,26 @@ function evaluateFunc(funcStr, xVal) {
     }
 }
 
+function calculateExactValue(funcStr, a, b) {
+    // Simpson's rule with n=10000 for a very close approximation (Exact Value)
+    const n = 10000;
+    const h = (b - a) / n;
+    let sumOdd = 0;
+    let sumEven = 0;
+    
+    const f0 = evaluateFunc(funcStr, a);
+    const fn = evaluateFunc(funcStr, b);
+    
+    for (let i = 1; i < n; i++) {
+        let x = a + i * h;
+        let val = evaluateFunc(funcStr, x);
+        if (i % 2 !== 0) sumOdd += val;
+        else sumEven += val;
+    }
+    
+    return (h / 3) * (f0 + fn + 4 * sumOdd + 2 * sumEven);
+}
+
 window.calculateNumerical = function() {
     resetNumUI();
     const funcStr = document.getElementById('num-func').value;
@@ -93,8 +121,14 @@ window.calculateNumerical = function() {
             throw new Error("Simpson's rule requires an even number of intervals (n).");
         }
 
+        // Calculate exact value (approximation)
+        const exact = calculateExactValue(funcStr, a, b);
+
         // Calculate steps
         const result = runNumericalMethod(currentNumMethod, funcStr, a, b, n);
+        
+        // Calculate Absolute Error
+        const absError = Math.abs(exact - result.finalResult);
         
         // Show result
         const resDisplay = document.getElementById('num-result-value');
@@ -103,6 +137,10 @@ window.calculateNumerical = function() {
         } else {
             resDisplay.textContent = result.finalResult.toFixed(5);
         }
+
+        // Update Exact Value and Error
+        document.getElementById('num-exact-value').textContent = exact.toFixed(6);
+        document.getElementById('num-abs-error').textContent = absError.toFixed(6);
 
         // Render steps and graph
         renderNumSteps(result);
@@ -134,6 +172,9 @@ window.calculateAllMethods = function() {
         if (n <= 0) throw new Error("Number of intervals must be positive.");
         if (n % 2 !== 0) throw new Error("Calculate All Methods requires 'n' to be even for Simpson's Rule to work properly.");
 
+        // Calculate exact value (approximation)
+        const exact = calculateExactValue(funcStr, a, b);
+
         const resRect = runNumericalMethod('rectangular', funcStr, a, b, n);
         const resTrap = runNumericalMethod('trapezoidal', funcStr, a, b, n);
         const resSimp = runNumericalMethod('simpson', funcStr, a, b, n);
@@ -142,6 +183,12 @@ window.calculateAllMethods = function() {
         document.getElementById('res-all-trap').textContent = resTrap.finalResult.toFixed(5);
         document.getElementById('res-all-simp').textContent = resSimp.finalResult.toFixed(5);
         
+        // Update Truth and Errors
+        document.getElementById('num-exact-value-all').textContent = exact.toFixed(6);
+        document.getElementById('err-all-rect').textContent = Math.abs(exact - resRect.finalResult).toFixed(6);
+        document.getElementById('err-all-trap').textContent = Math.abs(exact - resTrap.finalResult).toFixed(6);
+        document.getElementById('err-all-simp').textContent = Math.abs(exact - resSimp.finalResult).toFixed(6);
+
         renderNumStepsAll(resRect, resTrap, resSimp);
         renderNumGraph(funcStr, a, b, n, ['rectangular', 'trapezoidal', 'simpson'], [resRect, resTrap, resSimp]);
         
