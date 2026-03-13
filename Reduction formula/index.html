@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math2 Reduction Formula Calculator</title>
+    <meta name="description" content="A powerful calculator using recursive reduction formulas for integrals.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Ionicons for some icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    
+    <!-- Math.js for evaluating math expressions -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+    <!-- Chart.js for graphing -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <ion-icon name="calculator-outline"></ion-icon>
+                <h1>Math2 <span>Calculator</span></h1>
+            </div>
+            <p>Multi-tool Calculus Platform</p>
+            
+            <div class="tabs-container">
+                <button class="main-tab-btn active" data-target="reduction-tab">Reduction Formula</button>
+                <button class="main-tab-btn" data-target="numerical-tab">Numerical Integration</button>
+            </div>
+        </header>
+
+        <main>
+            <div id="reduction-tab" class="main-tab-content active">
+            <section class="formulas-section">
+                <h2>Select Formula</h2>
+                <div class="formula-grid">
+                    <div class="formula-card active" data-formula="1">
+                        <div class="card-icon"><ion-icon name="analytics-outline"></ion-icon></div>
+                        <h3>Wallis Formula</h3>
+                        <p>sin/cos from 0 to π/2</p>
+                    </div>
+                    <div class="formula-card" data-formula="2">
+                        <div class="card-icon"><ion-icon name="pulse-outline"></ion-icon></div>
+                        <h3>∫ tanⁿ(x) dx</h3>
+                        <p>Definite Integral</p>
+                    </div>
+                    <div class="formula-card" data-formula="3">
+                        <div class="card-icon"><ion-icon name="options-outline"></ion-icon></div>
+                        <h3>∫ secⁿ(x) dx</h3>
+                        <p>Definite Integral</p>
+                    </div>
+                    <div class="formula-card" data-formula="4">
+                        <div class="card-icon"><ion-icon name="git-network-outline"></ion-icon></div>
+                        <h3>∫ xⁿ · sin(x) dx</h3>
+                        <p>Definite Integral</p>
+                    </div>
+                    <div class="formula-card" data-formula="5">
+                        <div class="card-icon"><ion-icon name="git-merge-outline"></ion-icon></div>
+                        <h3>∫ xⁿ · cos(x) dx</h3>
+                        <p>Definite Integral</p>
+                    </div>
+                    <div class="formula-card" data-formula="6">
+                        <div class="card-icon"><ion-icon name="hardware-chip-outline"></ion-icon></div>
+                        <h3>∫ xᵐ · cos(nx) dx</h3>
+                        <p>Definite Integral</p>
+                    </div>
+                    <div class="formula-card" data-formula="7">
+                        <div class="card-icon"><ion-icon name="flask-outline"></ion-icon></div>
+                        <h3>∫ sinⁿ(x) · cosᵐ(x) dx</h3>
+                        <p>Definite Integral</p>
+                    </div>
+                    <div class="formula-card" data-formula="8">
+                        <div class="card-icon"><ion-icon name="rocket-outline"></ion-icon></div>
+                        <h3>∫ xⁿ · e^(mx) dx</h3>
+                        <p>Definite Integral</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="calculator-panel">
+                <div class="panel-header">
+                    <h2 id="selected-formula-title">Wallis Formula</h2>
+                </div>
+
+                <form id="calc-form" onsubmit="event.preventDefault(); calculate();">
+                    <div class="inputs-container" id="inputs-container">
+                        <!-- Dynamic inputs injected here -->
+                    </div>
+                    <button type="submit" class="btn-calculate">
+                        <span>Calculate Result</span>
+                        <ion-icon name="arrow-forward-outline"></ion-icon>
+                    </button>
+                </form>
+
+                <div class="result-display">
+                    <div class="result-label">Result</div>
+                    <div class="result-value" id="result-value">0.00000</div>
+                    <button id="toggle-steps-btn" class="toggle-steps-btn" type="button" style="display: none;">View
+                        Step-by-Step Details</button>
+                </div>
+
+                <div id="steps-container" class="steps-container" style="display: none;">
+                    <h3>Step-by-Step Solution</h3>
+                    <div class="steps-timeline" id="steps-timeline">
+                        <!-- Steps injected here -->
+                    </div>
+                </div>
+            </section>
+            </div>
+
+            <div id="numerical-tab" class="main-tab-content">
+                <section class="formulas-section">
+                    <h2>Numerical Methods</h2>
+                    <div class="formula-grid">
+                        <div class="formula-card num-method-card active" data-method="rectangular">
+                            <div class="card-icon"><ion-icon name="stats-chart-outline"></ion-icon></div>
+                            <h3>Rectangular Rule</h3>
+                            <p>Left endpoints</p>
+                        </div>
+                        <div class="formula-card num-method-card" data-method="trapezoidal">
+                            <div class="card-icon"><ion-icon name="analytics-outline"></ion-icon></div>
+                            <h3>Trapezoidal Rule</h3>
+                            <p>Linear interpolation</p>
+                        </div>
+                        <div class="formula-card num-method-card" data-method="simpson">
+                            <div class="card-icon"><ion-icon name="pulse-outline"></ion-icon></div>
+                            <h3>Simpson's Rule</h3>
+                            <p>Parabolic arcs</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="calculator-panel">
+                    <div class="panel-header">
+                        <h2 id="num-selected-method-title">Rectangular Rule</h2>
+                    </div>
+
+                    <form id="num-calc-form" onsubmit="event.preventDefault(); calculateNumerical();">
+                        <div class="inputs-container">
+                            <div class="input-group">
+                                <label for="num-func">Function f(x):</label>
+                                <input type="text" id="num-func" placeholder="e.g. x^2 + sin(x)" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="num-a">Lower limit (a):</label>
+                                <input type="number" id="num-a" step="any" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="num-b">Upper limit (b):</label>
+                                <input type="number" id="num-b" step="any" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="num-n">Number of intervals (n):</label>
+                                <input type="number" id="num-n" min="1" required>
+                            </div>
+                        </div>
+
+                        <div class="num-actions">
+                            <button type="button" class="btn-secondary" onclick="setNumExample()">Example Input</button>
+                            <button type="button" class="btn-secondary" onclick="clearNumInputs()">Clear Inputs</button>
+                        </div>
+
+                        <div class="num-actions" style="margin-top: 0;">
+                            <button type="button" class="btn-calculate" style="background: linear-gradient(135deg, var(--secondary), var(--primary));" onclick="calculateAllMethods()">Calculate All Methods</button>
+                            <button type="submit" class="btn-calculate">
+                                <span>Calculate Selected</span>
+                                <ion-icon name="arrow-forward-outline"></ion-icon>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="num-error" style="color: #ef4444; font-weight: bold; margin-bottom: 1rem; padding: 0.5rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px; display: none;"></div>
+
+                    <div class="result-display" id="num-single-result-display">
+                        <div class="result-label">Result</div>
+                        <div class="result-value" id="num-result-value">0.00000</div>
+                        <button id="num-toggle-steps-btn" class="toggle-steps-btn" type="button" style="display: none;">View Steps & Graph</button>
+                    </div>
+
+                    <div class="result-display" id="num-all-result-display" style="display: none;">
+                        <div class="result-label">All Methods Comparison</div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; text-align: left;">
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                                <span>Rectangular:</span>
+                                <strong id="res-all-rect" style="color: #fff">0.0</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                                <span>Trapezoidal:</span>
+                                <strong id="res-all-trap" style="color: #fff">0.0</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                                <span>Simpson's:</span>
+                                <strong id="res-all-simp" style="color: #fff">0.0</strong>
+                            </div>
+                        </div>
+                        <button id="num-toggle-steps-all-btn" class="toggle-steps-btn" type="button" style="display: none; width: 100%; margin-top: 1rem;">View Visualizations</button>
+                    </div>
+
+                    <div id="num-steps-container" class="steps-container" style="display: none;">
+                        <h3>Graph Visualization</h3>
+                        <div style="background: white; border-radius: 8px; padding: 10px; margin-bottom: 1.5rem;">
+                            <canvas id="num-chart"></canvas>
+                        </div>
+                        
+                        <h3>Step-by-Step Details</h3>
+                        <div class="num-steps-content" id="num-steps-content" style="overflow-x: auto;">
+                            <!-- Steps and Table will be injected here -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer>
+            <p>Designed with ❤️ By Mariam Eid to Doctor Abdellatif</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+    <script src="numerical.js"></script>
+</body>
+
+</html>
