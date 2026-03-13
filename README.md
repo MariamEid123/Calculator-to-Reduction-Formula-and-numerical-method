@@ -1,2 +1,45 @@
-Numerical Integration & Reduction Formulas Tool 🧮A robust Java-based tool designed to approximate definite integrals using various Numerical Analysis methods. This project bridges the gap between theoretical reduction formulas and practical computational algorithms.🚀 FeaturesDynamic Function Parsing: Users can input any mathematical function as a string (e.g., x^2, sin(x) + exp(x)) thanks to the exp4j library.Multiple Integration Methods:Rectangular Rule: Simple summation approach.Trapezoidal Rule: Linear interpolation between points.Simpson's 1/3 Rule: High-accuracy parabolic approximation (requires even $n$).Memory Efficient: Uses standard Java arrays for high-performance calculations.Error Handling: Robust validation for mathematical expressions and interval constraints.🛠️ How it WorksThe program follows a systematic numerical approach:Discretization: The interval $[a, b]$ is divided into $n$ sub-intervals of width $h = \frac{b-a}{n}$.Evaluation: The function is evaluated at each discrete point and stored in a memory-efficient array.Approximation:Trapezoidal: Uses the formula $Area \approx \frac{h}{2} [f(x_0) + 2\sum_{i=1}^{n-1} f(x_i) + f(x_n)]$Simpson's: Uses the weighted pattern $(1, 4, 2, 4, ..., 1)$ to achieve $O(h^4)$ accuracy.💻 Tech StackLanguage: Java 8+Library: exp4j (for dynamic expression evaluation).Mathematical Logic: Numerical Analysis & Reduction Formula principles.📥 Installation & SetupClone the repository:Bashgit clone https://github.com/YourUsername/Numerical-Integration-Java.git
-Download the exp4j-0.4.8.jar and add it to your project's Build Path.Run NumericalIntegration.java.📖 Example UsageInput:Function: x^2Lower Limit: 0Upper Limit: 3Intervals (n): 6Output:Trapezoidal: 9.125000Simpson's: 9.000000
+# Reduction Formula & Numerical Methods Calculator
+
+## Overview
+This project is a mathematical calculator designed to demonstrate two important concepts in calculus and numerical analysis:
+
+- Reduction Formula
+- Numerical Integration Methods
+
+The application allows users to compute integrals using reduction formulas and approximate definite integrals using numerical methods such as Simpson’s Rule and the Trapezoidal Rule.
+
+It also helps visualize how numerical integration works by drawing the shapes used in the approximation process.
+
+## Features
+
+- Reduction Formula calculator
+- Numerical integration using:
+  - Simpson's Rule
+  - Trapezoidal Rule
+- Graph visualization for Simpson and Trapezoidal shapes
+- Step-by-step explanation of calculations
+- Simple and interactive interface
+
+## Technologies Used
+
+- HTML
+- CSS
+- JavaScript
+
+## How It Works
+
+1. Choose the calculation method (Reduction Formula or Numerical Methods).
+2. Enter the required values.
+3. The program calculates the result.
+4. For numerical methods, the graph shows how the area under the curve is approximated using Simpson or Trapezoidal shapes.
+
+## Purpose of the Project
+
+This project was created as part of my learning journey in computer science and numerical computing.  
+It combines mathematical concepts with programming to build an interactive educational tool that helps users understand integration techniques.
+
+## Author
+
+**Mariam Eid**  
+Computer Science and Engineering Student  
+Alamein International University
